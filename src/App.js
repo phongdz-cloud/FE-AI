@@ -1,13 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import LoginScreen from "./Screens/LoginScreen";
-import RegisterScreen from "./Screens/RegisterScreen";
-import ProfileScreen from "./Screens/ProfileScreen";
-import SigninScreen from "./Screens/SigninScreen";
+import SigninScreen from "./Screens/SigninScreen"
 import SignupScreen from "./Screens/SignupScreen";
 import Slidebar from "./components/layout/Slidebar";
 import Mainnav from "./components/layout/Mainnav";
 import Main from "./components/Main";
-import Footer from "./components/layout/Footer";
 import Textract from "./Screens/Textract";
 
 function App() {

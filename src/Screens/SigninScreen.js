@@ -57,7 +57,7 @@ function SigninScreen() {
                   value={password} onChange={e => setPassword(e.target.value)}
                 />
               </label>
-              <a className="link-info forget-link" href="">
+              <a className="link-info forget-link" href="/#">
                 Forgot your password?
               </a>
               <button className="form-btn primary-default-btn transparent-btn" type='submit'>

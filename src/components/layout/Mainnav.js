@@ -29,7 +29,7 @@ function Mainnav() {
               {userInfo ? (
                 <div className="notification-wrapper">
                   <button className="gray-circle-btn dropdown-btn" title="To messages" type="button">
-                    <picture><source srcSet="./img/avatar/avatar-illustrated-02.webp" type="image/webp" /><img src="./img/avatar/avatar-illustrated-02.png" alt="User picture" /></picture>
+                    <picture><source srcSet="./img/avatar/avatar-illustrated-02.webp" type="image/webp" /><img src="./img/avatar/avatar-illustrated-02.png" alt="User" /></picture>
                   </button>
                   <ul className="users-item-dropdown notification-dropdown dropdown">
                     <li>
@@ -39,7 +39,7 @@ function Mainnav() {
                       </a>
                     </li>
                     <li>
-                      <a className="danger" >
+                      <a className="danger" href="/#" >
                         <i data-feather="log-out" aria-hidden="true" />
                         <span onClick={logoutHandler}>Log out</span>
                       </a>
