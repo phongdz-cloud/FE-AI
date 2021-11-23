@@ -20,12 +20,12 @@ const LoginScreen = () => {
 
     const location = useLocation()
     const navigate = useNavigate()
-    const redirect = location.search ? location.search.split('=')[1]: '/'
+    const redirect = location.search ? location.search.split('=')[1] : '/'
     useEffect(() => {
-        if(userInfo) {
+        if (userInfo) {
             navigate(redirect)
         }
-    },[navigate,userInfo,redirect])
+    }, [navigate, userInfo, redirect])
 
     const submitHandler = (e) => {
         e.preventDefault() //dispatch login
@@ -41,14 +41,14 @@ const LoginScreen = () => {
                 <Form.Group controlId='accNumber'>
                     <Form.Label>Account Number</Form.Label>
                     <Form.Control type='accNumber' placeholder='Enter Account Number'
-                    value={email} onChange={e => setEmail(e.target.value)}>
+                        value={email} onChange={e => setEmail(e.target.value)}>
                     </Form.Control>
                 </Form.Group>
 
                 <Form.Group controlId='password'>
                     <Form.Label>Password</Form.Label>
                     <Form.Control type='password' placeholder='Enter password'
-                    value={password} onChange={e => setPassword(e.target.value)}>
+                        value={password} onChange={e => setPassword(e.target.value)}>
                     </Form.Control>
                 </Form.Group>
 

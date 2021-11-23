@@ -47,8 +47,8 @@ function Mainnav() {
                   </ul>
                 </div>
               ) : (<div>
-                <a href="/signin"><span style={{ color: 'lemonchiffon' }}>Login&#160;&#160;</span></a>
-              <a href="/signup"><span style={{ color: 'lemonchiffon' }}>Register</span></a></div>)}
+                <a href="/signin"><span style={{ color: 'royalblue' }}>Login&#160;&#160;</span></a>
+              <a href="/signup"><span style={{ color: 'royalblue' }}>Register</span></a></div>)}
             </div>
             <button className="theme-switcher gray-circle-btn" type="button" title="Switch theme">
               <span className="sr-only">Switch theme</span>

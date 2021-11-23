@@ -1,7 +1,7 @@
 import {
-    USER_DETAILS_FAIL,
-    USER_DETAILS_REQUEST,
-    USER_DETAILS_SUCCESS,
+    CUSGET_PROFILE_REQUEST,
+    CUSGET_PROFILE_SUCCESS,
+    CUSGET_PROFILE_FAIL,
     USER_LOGIN_FAIL,
     USER_LOGIN_REQUEST,
     USER_LOGIN_SUCCESS,
@@ -9,9 +9,9 @@ import {
     USER_REGISTER_FAIL,
     USER_REGISTER_REQUEST,
     USER_REGISTER_SUCCESS,
-    USER_UPDATE_PROFILE_FAIL,
-    USER_UPDATE_PROFILE_REQUEST,
-    USER_UPDATE_PROFILE_SUCCESS
+    CUSUPDATE_PROFILE_REQUEST,
+    CUSUPDATE_PROFILE_SUCCESS,
+    CUSUPDATE_PROFILE_FAIL,
 } from "../constants/userConstants"
 import axios from 'axios'
 
@@ -80,10 +80,10 @@ export const register = (username, password, email) => async (dispatch) => {
     }
 }
 
-export const getUserProfile = () => async (dispatch, getState) => {
+export const CusGetProfile = () => async (dispatch, getState) => {
     try {
         dispatch({
-            type: USER_DETAILS_REQUEST
+            type: CUSGET_PROFILE_REQUEST
         })
 
         const { userLogin: { userInfo } } = getState()
@@ -95,27 +95,26 @@ export const getUserProfile = () => async (dispatch, getState) => {
             }
         }
 
-        const { data } = await axios.get(`${URL}/v1/user/profile`, config)
+        const { data } = await axios.get(`${URL}/api/customerprofile`, config)
 
         dispatch({
-            type: USER_DETAILS_SUCCESS,
+            type: CUSGET_PROFILE_SUCCESS,
             payload: data
         })
 
     } catch (error) {
         dispatch({
-            type: USER_DETAILS_FAIL,
-            payload: error.response && error.response.data.message
-                ? error.response.data.message : error.message
+            type: CUSGET_PROFILE_FAIL,
+            payload: error.response.data
         })
     }
 }
 
 
-export const updateUserProfile = (user) => async (dispatch, getState) => {
+export const CusUpdateProfile = (updateData) => async (dispatch, getState) => {
     try {
         dispatch({
-            type: USER_UPDATE_PROFILE_REQUEST
+            type: CUSUPDATE_PROFILE_REQUEST
         })
 
         const { userLogin: { userInfo } } = getState()
@@ -127,16 +126,16 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
             }
         }
 
-        const { data } = await axios.put(`${URL}/v1/user/profile`, user, config)
+        const { data } = await axios.post(`${URL}/api/customer`, updateData, config)
 
         dispatch({
-            type: USER_UPDATE_PROFILE_SUCCESS,
+            type: CUSUPDATE_PROFILE_SUCCESS,
             payload: data
         })
 
     } catch (error) {
         dispatch({
-            type: USER_UPDATE_PROFILE_FAIL,
+            type: CUSUPDATE_PROFILE_FAIL,
             payload: error.response.data
         })
     }

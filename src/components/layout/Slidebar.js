@@ -10,8 +10,8 @@ function Slidebar() {
               <span className="sr-only">Home</span>
               <span className="icon logo" aria-hidden="true" />
               <div className="logo-text">
-                <span className="logo-title">Elegant</span>
-                <span className="logo-subtitle">Dashboard</span>
+                <span className="logo-title">PDTS</span>
+                <span className="logo-subtitle">Ai Project</span>
               </div>
             </a>
             <button
@@ -30,66 +30,6 @@ function Slidebar() {
                   <span className="icon home" aria-hidden="true" />
                   Dashboard
                 </a>
-              </li>
-              <li>
-                <a className="show-cat-btn" href="##">
-                  <span className="icon document" aria-hidden="true" />
-                  Posts
-                  <span
-                    className="category__btn transparent-btn"
-                    title="Open list"
-                  >
-                    <span className="sr-only">Open list</span>
-                    <span className="icon arrow-down" aria-hidden="true" />
-                  </span>
-                </a>
-                <ul className="cat-sub-menu">
-                  <li>
-                    <a href="posts.html">All Posts</a>
-                  </li>
-                  <li>
-                    <a href="new-post.html">Add new post</a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a className="show-cat-btn" href="##">
-                  <span className="icon folder" aria-hidden="true" />
-                  Categories
-                  <span
-                    className="category__btn transparent-btn"
-                    title="Open list"
-                  >
-                    <span className="sr-only">Open list</span>
-                    <span className="icon arrow-down" aria-hidden="true" />
-                  </span>
-                </a>
-                <ul className="cat-sub-menu">
-                  <li>
-                    <a href="categories.html">All categories</a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a className="show-cat-btn" href="##">
-                  <span className="icon image" aria-hidden="true" />
-                  Media
-                  <span
-                    className="category__btn transparent-btn"
-                    title="Open list"
-                  >
-                    <span className="sr-only">Open list</span>
-                    <span className="icon arrow-down" aria-hidden="true" />
-                  </span>
-                </a>
-                <ul className="cat-sub-menu">
-                  <li>
-                    <a href="media-01.html">Media-01</a>
-                  </li>
-                  <li>
-                    <a href="media-02.html">Media-02</a>
-                  </li>
-                </ul>
               </li>
               <li>
                 <a className="show-cat-btn" href="##">

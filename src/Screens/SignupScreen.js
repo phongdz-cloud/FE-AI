@@ -49,9 +49,7 @@ function SignupScreen() {
             {errorRes.message}, {errorRes.details}</h2>}
           {loading && <h2 style={{ color: 'deepskyblue', marginTop: '30px' }}>loading...</h2>}
         </main>
-
       </div>
-
     </>
   )
 }

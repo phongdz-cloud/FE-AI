@@ -1,14 +1,13 @@
 import thunk from "redux-thunk"
 import {createStore, combineReducers, applyMiddleware} from "redux"
 import {composeWithDevTools} from "redux-devtools-extension"
-import { userLoginReducer,userRegisterReducer,userProfileReducer ,userUpdateProfileReducer} from "./reducers/userReducers"
-
+import { userLoginReducer,userRegisterReducer,CusProfileReducer ,UpdateProfileReducer} from "./reducers/userReducers"
 
 const reducer= combineReducers({
     userLogin :userLoginReducer,
     userRegister: userRegisterReducer,
-    userProfile: userProfileReducer,
-    userUpdateProfile: userUpdateProfileReducer,
+    CusProfile: CusProfileReducer,
+    UpdateProfile: UpdateProfileReducer,
 
 })
 
@@ -19,6 +18,6 @@ const initialState={
 }
 
 const middleware= [thunk]
-const store= createStore(reducer, initialState,composeWithDevTools(applyMiddleware(...middleware)))
+const store = createStore(reducer, initialState,composeWithDevTools(applyMiddleware(...middleware)))
 
 export default store
