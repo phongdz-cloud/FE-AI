@@ -12,8 +12,6 @@ function ItemsLinesModal(props) {
             <div style={{ textAlign: 'center' }} className='row'>
                 <h3 style={{ color: 'slateblue', paddingTop: '100px' }} className='col'>{ItemLine.item}</h3>
                 <h3 style={{ color: 'slateblue', paddingTop: '100px' }} className='col'>{ItemLine.price}</h3>
-                <h3 style={{ color: 'slateblue', paddingTop: '100px' }} className='col'>{ItemLine.item}</h3>
-                <h3 style={{ color: 'slateblue', paddingTop: '100px' }} className='col'>{ItemLine.price}</h3>
             </div>
         </div>
 
