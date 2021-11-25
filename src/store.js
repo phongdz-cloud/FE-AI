@@ -2,13 +2,15 @@ import thunk from "redux-thunk"
 import {createStore, combineReducers, applyMiddleware} from "redux"
 import {composeWithDevTools} from "redux-devtools-extension"
 import { userLoginReducer,userRegisterReducer,userProfileReducer ,userUpdateProfileReducer} from "./reducers/userReducers"
-
+import {importImageReducer,updateImageReducer} from "./reducers/imageReducers"
 
 const reducer= combineReducers({
     userLogin :userLoginReducer,
     userRegister: userRegisterReducer,
     userProfile: userProfileReducer,
     userUpdateProfile: userUpdateProfileReducer,
+    uploadImage:importImageReducer,
+    updateImage:updateImageReducer,
 
 })
 

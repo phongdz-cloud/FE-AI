@@ -32,20 +32,20 @@ function Slidebar() {
                 </a>
               </li>
               <li>
-                <a className="show-cat-btn" href="##">
+                <a className="show-cat-btn" href="/textract">
                   <span className="icon document" aria-hidden="true" />
-                  Posts
+                  Textract
                   <span
                     className="category__btn transparent-btn"
                     title="Open list"
                   >
-                    <span className="sr-only">Open list</span>
+                    <span className="sr-only">Upload one Image</span>
                     <span className="icon arrow-down" aria-hidden="true" />
                   </span>
                 </a>
                 <ul className="cat-sub-menu">
                   <li>
-                    <a href="posts.html">All Posts</a>
+                    <a href="/textract">Upload a Image</a>
                   </li>
                   <li>
                     <a href="new-post.html">Add new post</a>
