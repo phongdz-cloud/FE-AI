@@ -1,328 +1,229 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Form, Button, Row, Col, Table, Modal } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import Message from '../components/Message'
-import Loader from '../components/Loader'
-import { getUserProfile, updateUserProfile } from '../actions/userActions'
-import ProfileForm from '../components/ProfileForm'
-import { Paypal } from 'react-bootstrap-icons'
+import { CusGetProfile, CusUpdateProfile, CusDeletePayment, cusGetType } from '../actions/userActions'
 
-function MyVerticallyCenteredModal(props) {
-    const dispatch = useDispatch()
-    const [amountNumber, setAmountNumber] = useState(5)
-    const [isCharge, setIsCharge] = useState(true)
-    const userGetPayment = useSelector(state => state.userGetPayment)
-    const { loading } = userGetPayment
+function ItemsLinesModal(props) {
+    const ItemLines = props.data;
+    const SpecialFields = props.data2;
 
-    const submitHandler = () => {
-        if (isCharge) {
-            dispatch()
+    const itemLineDetails = ItemLines.map((ItemLine) =>
+        <div>
+            <div style={{ textAlign: 'center' }} className='row'>
+                <h3 style={{ color: 'slateblue', paddingTop: '100px' }} className='col'>{ItemLine.item}</h3>
+                <h3 style={{ color: 'slateblue', paddingTop: '100px' }} className='col'>{ItemLine.price}</h3>
+                <h3 style={{ color: 'slateblue', paddingTop: '100px' }} className='col'>{ItemLine.item}</h3>
+                <h3 style={{ color: 'slateblue', paddingTop: '100px' }} className='col'>{ItemLine.price}</h3>
+            </div>
+        </div>
+
+    );
+    return (itemLineDetails);
+}
+
+function PaymentListing(props) {
+
+    const allPayment = props.data;
+
+    function toggleEdit(e) {
+        var x = document.getElementById(e).style.display
+        if (x === 'block') {
+            document.getElementById(e).style.display = 'none'
+        }
+        else {
+            document.getElementById(e).style.display = 'block'
         }
     }
-    return (
 
-        <Modal
-            {...props}
-            size="md"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered>
-            <Modal.Header closeButton>
-                <Modal.Title style={{ color: 'mediumspringgreen' }} id="contained-modal-title-vcenter">
-                    Số dư hiện tại: {props.data} VNĐ
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form.Group as={Col} controlId="fullname">
-                    <Form.Label style={{ color: 'gold' }}  >Nhập số dư xử lý giao dịch (mệnh giá: Dollar)</Form.Label>
-                    <Form.Control required type="number" value={amountNumber} onChange={e => setAmountNumber(e.target.value)}
-                    />
-                </Form.Group>
+    const listPayments = allPayment.map((payment) =>
+        <div>
+            <div style={{ textAlign: 'center' }} className='row'>
+                <h3 style={{ color: 'slateblue', paddingTop: '10px' }} className='col'><a rel="noreferrer" target="_blank" href={payment.imageBill}>Image</a></h3>
+                <h3 style={{ color: 'slateblue', paddingTop: '10px' }} className='col'>{payment.uploadDate}</h3>
+                <h3 style={{ color: 'slateblue', paddingTop: '10px' }} className='col'>{payment.type}</h3>
+                <h3 style={{ paddingTop: '10px' }} className='col'><input value={payment.id} type='checkbox' onChange={props.onChange} /></h3>
+                <h3 style={{ paddingTop: '10px' }} className='col'><input value={payment.id} type='button' onClick={e => toggleEdit(e.target.value)} /></h3>
+            </div>
+            <div id={payment.id} style={{ display: 'none' }}>
+                <ItemsLinesModal data={payment.itemLines} data2={payment.specialFields} />
+            </div>
+        </div>
 
-                <Form.Group className="mb-3" as={Col} controlId="birthdate">
-                    <Form.Label style={{ color: 'gold' }}  >Quy đổi (mệnh giá: VNĐ)</Form.Label>
-                    <Form.Control required type="number" disabled={true}
-                    />
-                </Form.Group>
-
-                <Form.Group as={Col} id="chargeorwithdraw">
-                    <Form.Label >Chọn hình thức xử lý giao dịch (PAYPAL)</Form.Label>
-                    <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                        <Form.Check style={{ color: 'khaki' }} type="radio" label="Nạp tiền" checked={isCharge === true}
-                            onChange={() => setIsCharge(true)} />
-                        <Form.Check style={{ color: 'khaki' }} type="radio" label="Rút tiền" checked={isCharge === false}
-                            onChange={() => setIsCharge(false)} />
-                    </div>
-                </Form.Group>
-
-                <Button style={{ backgroundColor: 'dodgerblue', width: '100%' }}
-                    onClick={submitHandler}><Paypal size={25} /> Xử lý</Button>
-                {loading && <Loader />}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={props.onHide}>Close</Button>
-            </Modal.Footer>
-        </Modal>
     );
+    return (listPayments);
 }
 
 const ProfileScreen = () => {
-
     const dispatch = useDispatch()
     const userLogin = useSelector(state => state.userLogin)
     const { userInfo } = userLogin
 
-    const userProfile = useSelector(state => state.userProfile)
-    const { loading, user } = userProfile
+    const CusProfile = useSelector(state => state.CusProfile)
+    const { profile } = CusProfile
 
-    const userUpdateProfile = useSelector(state => state.userUpdateProfile)
-    const { successRes, errorRes } = userUpdateProfile
+    const UpdateProfile = useSelector(state => state.UpdateProfile)
+    const { loading, successRes, errorRes } = UpdateProfile
 
+    const getPayment = useSelector(state => state.getPayment)
+    const { getPaymentLoading, allPayment } = getPayment
 
+    const delePayment = useSelector(state => state.delePayment)
+    const { deleLoading, deleSuccess, DeleFail } = delePayment
 
-    const [name, setName] = useState('')
-    const [birth, setBirth] = useState('')
-    const [isMale, setIsMale] = useState(true)
-    const [number, setNumber] = useState('')
-    const [issueDate, setIssueDate] = useState('')
-    const [issuePlace, setIssuePlace] = useState('')
-    const [phoneNumber, setPhoneNumber] = useState('')
+    const [username, setusername] = useState('')
     const [email, setEmail] = useState('')
-    const [homeAddress, setHomeAddress] = useState('')
-    const [title, setTitle] = useState('')
-    const [workAddress, setWorkAddress] = useState('')
-    const [salary, setSalary] = useState()
-    const [checkUpdate, setcheckUpdate] = useState(true)
-    const [accNumber, setAccNumber] = useState('')
-    const [balance, setBalance] = useState(0)
-
-    const [curPassword, setCurPassword] = useState('')
-    const [rePassword, setRePassword] = useState('')
-    const [newPassword, setNewPassWord] = useState('')
-    const [confirmNewPassword, setConfirmNewPassword] = useState('')
-    const [message, setMessage] = useState('')
-
-    //modal button (paypal)
-    const [modalShow, setModalShow] = useState(false);
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [personalIncome, setPersonalIncome] = useState(0)
+    const [monthlySpending, setMonthlySpending] = useState('')
+    const [avatar, setAvatar] = useState('')
+    const [paymentType, setPaymentType] = useState('DAILY')
 
     const navigate = useNavigate()
+
     useEffect(() => {
         if (!userInfo) {
-            navigate('/login')
+            navigate('/signin')
         }
         else {
-            if (!user.name) {
-                dispatch(getUserProfile())
+            if (!profile) {
+                dispatch(CusGetProfile())
             }
             else {
-                setName(user.name)
-                setBirth(user.birth.slice(0, 10))
-                setNumber(user.personalIdNumber.number)
-                setIsMale(user.isMale)
-                setIssueDate(user.personalIdNumber.issueDate.slice(0, 10))
-                setIssuePlace(user.personalIdNumber.issuePlace)
-                setPhoneNumber(user.phoneNumber)
-                setHomeAddress(user.homeAddress)
-                setEmail(user.email)
-                setTitle(user.job.title)
-                setWorkAddress(user.job.workAddress)
-                setSalary(user.job.salary)
-                setAccNumber(user.accNumber)
-                setBalance(user.balance)
+                if (!profile.message) {
+                    setFirstName(profile.firstName)
+                    setLastName(profile.lastName)
+                    setPersonalIncome(profile.personalIncome)
+                    setMonthlySpending(profile.monthlySpending)
+                    setusername(profile.user.username)
+                    setEmail(profile.user.email)
+                    setAvatar(profile.user.avatar)
+                }
             }
         }
-    }, [dispatch, navigate, userInfo, user])
+
+    }, [dispatch, navigate, userInfo, profile])
 
     const submitHandler = (e) => {
-        e.preventDefault() //update profile
-        if (curPassword !== rePassword) {
-            setMessage('Password không trùng khớp !')
+        e.preventDefault() //dispatch update profile
+        dispatch(CusUpdateProfile({ firstName, lastName, personalIncome, monthlySpending }))
+
+    }
+
+    const searchHandler = (e) => {
+        e.preventDefault()
+        dispatch(cusGetType(paymentType))
+    }
+
+    const [ids, setIds] = useState([])
+
+    const checkHandler = (e) => {
+        const isChecked = e.target.checked
+
+        if (isChecked) {
+            if (!ids.includes(e.target.value)) {
+                setIds([...ids, e.target.value])
+            }
         }
         else {
-            dispatch(updateUserProfile({
-                id: user._id, curPassword, newPassword, confirmNewPassword
-            }))
+            if (ids.includes(e.target.value)) {
+                let index = ids.indexOf(e.target.value)
+                ids.splice(index, 1)
+            }
         }
     }
 
-    const toggleUpdate = () => {
-        setcheckUpdate(x => !x)
-        setMessage(null)
+    const deleteHandler = (e) => {
+        e.preventDefault()
+        dispatch(CusDeletePayment(ids))
     }
-    //tran4774@gmail.com   qwertyU@1
-    return (<ProfileForm>
-        <Form style={{ color: 'deepskyblue' }} onSubmit={submitHandler}>
-            <Col>
-                <h1 style={{ color: 'lightyellow' }}>Thông tin cá nhân</h1>
-                <Row className="mb-3" >
-                    <Form.Group as={Col} controlId="accnumber">
-                        <Form.Label >Số tài khoản</Form.Label>
-                        <Form.Control required type="text" value={accNumber} disabled={true} />
-                    </Form.Group>
 
-                    <Form.Group as={Col} controlId="balance">
-                        <Form.Label >Số dư tài khoản:</Form.Label>
-                        <Button style={{ backgroundColor: 'palevioletred', width: '100%' }}
-                            variant="primary" onClick={() => setModalShow(true)}>{balance} VNĐ</Button>
-                    </Form.Group>
-                    <MyVerticallyCenteredModal data={balance} show={modalShow} onHide={() => setModalShow(false)} />
-                </Row>
+    return (
+        <>
+            <article className='container'>
+                <form className="row form" onSubmit={submitHandler}>
+                    <div style={{ display: 'flex', justifyContent: 'center' }} className="container" >
+                        <img src={avatar} alt="Girl in a jacket" width="100" height="100" />
+                    </div>
+                    <div className='col'>
+                        <label className="form-label-wrapper">
+                            <p className="form-label">UserName</p>
+                            <input className="form-input" type="text" placeholder="your User name" required
+                                value={username} onChange={e => setusername(e.target.value)} />
+                        </label>
+                        <label className="form-label-wrapper">
+                            <p className="form-label">FirstName</p>
+                            <input className="form-input" type="text" placeholder="Enter first name" required
+                                value={firstName} onChange={e => setFirstName(e.target.value)} />
+                        </label>
+                        <label className="form-label-wrapper">
+                            <p className="form-label">last name</p>
+                            <input className="form-input" type="text" placeholder="Enter your last name" required
+                                value={lastName} onChange={e => setLastName(e.target.value)} />
+                        </label>
+                    </div>
+                    <div className='col'>
+                        <label className="form-label-wrapper">
+                            <p className="form-label">Email</p>
+                            <input className="form-input" type="email" placeholder="Enter your email" required
+                                value={email} onChange={e => setEmail(e.target.value)} />
+                        </label>
+                        <label className="form-label-wrapper">
+                            <p className="form-label">Personal Income</p>
+                            <input className="form-input" type="number" placeholder="enter your personal Income" required
+                                value={personalIncome} onChange={e => setPersonalIncome(e.target.value)} />
+                        </label>
+                        <label className="form-label-wrapper">
+                            <p className="form-label">monthly Spending</p>
+                            <input className="form-input" type="text" placeholder="Enter your monthly Spending" required
+                                value={monthlySpending} onChange={e => setMonthlySpending(e.target.value)} />
+                        </label>
+                    </div>
+                    <button className="form-btn primary-default-btn transparent-btn" type='submit'>Update your Profile</button>
+                    {firstName === '' && <div className='container' style={{ color: 'red', textAlign: 'center', fontSize: 25 }}>please update your profile</div>}
+                    {successRes && <div className='container' style={{ color: 'springgreen', textAlign: 'center', fontSize: 25 }}>USER Updated !!</div>}
+                    {errorRes && <div className='container' style={{ color: 'red', textAlign: 'center', fontSize: 25 }}>{errorRes.message}, {errorRes.details}</div>}
+                    {loading && <div className='container' style={{ color: 'deepskyblue', textAlign: 'center', fontSize: 25 }}>loading...</div>}
+                </form>
+            </article>
 
-                <Row className="mb-3" >
-                    <Form.Group as={Col} controlId="fullname">
-                        <Form.Label >Họ và tên</Form.Label>
-                        <Form.Control required type="text" placeholder="Enter Full Name"
-                            value={name} onChange={e => setName(e.target.value)} disabled={true} />
-                    </Form.Group>
-
-                    <Form.Group as={Col} controlId="birthdate">
-                        <Form.Label>Ngày sinh</Form.Label>
-                        <Form.Control required type="date"
-                            value={birth} onChange={e => setBirth(e.target.value)} disabled={true} />
-                    </Form.Group>
-
-                    <Form.Group as={Col} id="gender">
-                        <Form.Label >Giới tính</Form.Label>
-                        <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                            <Form.Check style={{ color: 'springgreen' }} type="radio" label="Nam" checked={isMale === true}
-                                onChange={() => setIsMale(true)} disabled={true} />
-                            <Form.Check style={{ color: 'springgreen' }} type="radio" label="Nữ" checked={isMale === false}
-                                onChange={() => setIsMale(false)} disabled={true} />
+            {/* save receipt */}
+            <article className='container'>
+                <form className="row form" >
+                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '18px' }} className='container'>
+                        <h1 style={{ color: 'orangered', textAlign: 'center', marginRight: '10px' }}>Saved Receipt</h1>
+                        <select name="type" id="type" onChange={e => setPaymentType(e.target.value)}>
+                            <option value="DAILY">DAILY</option>
+                            <option value="MONTHLY">MONTHLY</option>
+                        </select>
+                        <button onClick={searchHandler}>Search</button>
+                    </div>
+                    {getPaymentLoading && <div className='container' style={{ color: 'deepskyblue', textAlign: 'center', fontSize: 25 }}>loading...</div>}
+                    <button className="form-btn primary-default-btn" style={{ backgroundColor: 'red' }} onClick={deleteHandler}>Delete</button>
+                </form>
+                <form className="row form" >
+                    <label className="container col">
+                        <div style={{ color: 'darkcyan', textAlign: 'center' }} className='row'>
+                            <h2 style={{ color: 'lightseagreen' }} className='col'>Link</h2>
+                            <h2 style={{ color: 'lightseagreen' }} className='col'>CreatedDate</h2>
+                            <h2 style={{ color: 'lightseagreen' }} className='col'>Type</h2>
+                            <h2 style={{ color: 'lightseagreen' }} className='col'>TicktoDelete</h2>
+                            <h2 style={{ color: 'lightseagreen' }} className='col'>ClickforDetails</h2>
                         </div>
-                    </Form.Group>
-                </Row>
-
-                <Row className="mb-3" >
-                    <Form.Label style={{ fontSize: 20 }}>Số CMND - Ngày cấp - Nơi cấp</Form.Label>
-                    <Form.Group as={Col} controlId="idnumber">
-                        <Form.Control required type="text" placeholder="ID Number"
-                            value={number} onChange={e => setNumber(e.target.value)} disabled={true} />
-                    </Form.Group>
-
-                    <Form.Group as={Col} controlId="issuedate">
-                        <Form.Control required type="date"
-                            value={issueDate} onChange={e => setIssueDate(e.target.value)} disabled={true} />
-                    </Form.Group>
-
-                    <Form.Group as={Col} id="issueplace">
-                        <Form.Control required type="text" placeholder="Issue Place"
-                            value={issuePlace} onChange={e => setIssuePlace(e.target.value)} disabled={true} />
-                    </Form.Group>
-                </Row>
-
-                <Row className="mb-3" >
-                    <Form.Label style={{ fontSize: 20 }}>Thông tin liên lạc</Form.Label>
-                    <Form.Group as={Col} controlId="phonenumber">
-                        <Form.Control required type="text" placeholder="Phone Number"
-                            value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} disabled={checkUpdate} />
-                    </Form.Group>
-
-                    <Form.Group as={Col} controlId="email">
-                        <Form.Control required type="email" placeholder="Email Address"
-                            value={email} onChange={e => setEmail(e.target.value)} disabled={checkUpdate} />
-                    </Form.Group>
-
-                    <Form.Group style={{ marginTop: 10 }} id="homeaddress">
-                        <Form.Control required type="text" placeholder="Home Address"
-                            value={homeAddress} onChange={e => setHomeAddress(e.target.value)} disabled={checkUpdate} />
-                    </Form.Group>
-                </Row>
-
-                <Row className="mb-3" >
-                    <Form.Label style={{ fontSize: 20 }}>Thông tin nghề nghiệp</Form.Label>
-                    <Form.Group as={Col} controlId="jobtitle">
-                        <Form.Control required type="text" placeholder="Job Title"
-                            value={title} onChange={e => setTitle(e.target.value)} disabled={checkUpdate} />
-                    </Form.Group>
-
-                    <Form.Group as={Col} controlId="salary">
-                        <Form.Control required type="number" placeholder="May I know your Salary ?"
-                            value={salary} onChange={e => setSalary(e.target.value)} disabled={checkUpdate} />
-                    </Form.Group>
-
-                    <Form.Group style={{ marginTop: 10 }} id="workaddress">
-                        <Form.Control required type="text" placeholder="Work Place Address"
-                            value={workAddress} onChange={e => setWorkAddress(e.target.value)} disabled={checkUpdate} />
-                    </Form.Group>
-                </Row>
-
-                {!checkUpdate && <Row className="mb-3" >
-                    <Form.Label style={{ fontSize: 20 }}>Xác nhận mật khẩu</Form.Label>
-                    <Form.Group style={{ marginTop: 10, width: '50%' }} controlId="curpassword">
-                        <Form.Control required type="password" placeholder="Nhập mật khẩu hiện tại"
-                            value={curPassword} onChange={e => setCurPassword(e.target.value)} />
-                    </Form.Group>
-
-                    <Form.Group style={{ marginTop: 10, width: '50%' }} controlId="curpassword">
-                        <Form.Control required type="password" placeholder="Xác nhận mật khẩu hiện tại"
-                            value={rePassword} onChange={e => setRePassword(e.target.value)} />
-                    </Form.Group>
-
-                    <Form.Group style={{ marginTop: 20, width: '50%' }} id="newpassword">
-                        <Form.Control type="password" placeholder="Nhập mật khẩu mới"
-                            value={newPassword} onChange={e => setNewPassWord(e.target.value)} />
-                    </Form.Group>
-
-                    <Form.Group  style={{ marginTop: 20, width: '50%' }} id="confirmnewpassword">
-                        <Form.Control type="password" placeholder="Xác nhận nhập mật khẩu mới "
-                            value={confirmNewPassword} onChange={e => setConfirmNewPassword(e.target.value)} />
-                    </Form.Group>
-                </Row>}
-
-                <Row className="mb-3" >
-                    <Form.Group as={Col} controlId="register">
-                        <Button style={{ backgroundColor: 'palevioletred', width: '100%' }} variant="primary" type="submit">Cập nhật</Button>
-                    </Form.Group>
-
-                    <Form.Group as={Col} controlId="updatecontrol">
-                        <Form.Check type="checkbox" onChange={toggleUpdate} label="Check to Update" />
-                    </Form.Group>
-                </Row>
-
-                {message && <Message variant='info'>{message}</Message>}
-                {successRes && <Message variant='success'>{successRes.message}</Message>}
-                {errorRes && <Message variant='danger'>
-                {errorRes.messages.errors.map(e => e.msg).join(', ')}</Message>}
-                {loading && <Loader />}
-
-            </Col>
-        </Form>
-
-        <Form style={{ color: 'deepskyblue' }} onSubmit={submitHandler}>
-            <Col className="mb-3 mx-lg-5" >
-                <h1 style={{ color: 'lightyellow' }}>Thông tin giao dịch</h1>
-                <select value="Radish" className="mb-2">
-                    <option value="card1">card 1</option>
-                    <option value="card2">card 2</option>
-                    <option value="card3">card 3</option>
-                </select>
-                <Table striped bordered hover variant="info">
-                    <thead style={{ color: 'red' }}>
-                        <tr>
-                            <th>Transaction ID</th>
-                            <th>Transaction Type</th>
-                            <th>From</th>
-                            <th>To</th>
-                            <th>Amount</th>
-                            <th>Note</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                        </tr>
-                    </tbody>
-                </Table>
-            </Col>
-        </Form>
+                        {allPayment && <PaymentListing data={allPayment} onChange={checkHandler} />}
+                        {deleLoading && <div className='container' style={{ color: 'deepskyblue', textAlign: 'center', fontSize: 25 }}>loading...</div>}
+                        {deleSuccess && <div className='container' style={{ color: 'springgreen', textAlign: 'center', fontSize: 25 }}>Delete Complete !!</div>}
+                        {DeleFail && <div className='container' style={{ color: 'red', textAlign: 'center', fontSize: 25 }}>{DeleFail.message}, {DeleFail.details}</div>}
+                    </label>
+                </form>
+            </article>
 
 
-    </ProfileForm >
+            {/* {successRes && <h2 style={{ color: 'springgreen', marginTop: '30px' }}>USER Created !!</h2>}
+                {errorRes && <h2 style={{ color: 'red', marginTop: '30px' }}>
+                    {errorRes.message}, {errorRes.details}</h2>}
+                {loading && <h2 style={{ color: 'deepskyblue', marginTop: '30px' }}>loading...</h2>} */}
+        </>
     )
 }
 

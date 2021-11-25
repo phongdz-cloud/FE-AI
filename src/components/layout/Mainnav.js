@@ -29,7 +29,7 @@ function Mainnav() {
               {userInfo ? (
                 <div className="notification-wrapper">
                   <button className="gray-circle-btn dropdown-btn" title="To messages" type="button">
-                    <picture><source srcSet="./img/avatar/avatar-illustrated-02.webp" type="image/webp" /><img src="./img/avatar/avatar-illustrated-02.png" alt="User" /></picture>
+                    <span>{userInfo.name}</span>
                   </button>
                   <ul className="users-item-dropdown notification-dropdown dropdown">
                     <li>
@@ -47,8 +47,9 @@ function Mainnav() {
                   </ul>
                 </div>
               ) : (<div>
-                <a href="/signin"><span style={{ color: 'lemonchiffon',fontWeight:'bolder' }}>Login&#160;&#160;</span></a>
-              <a href="/signup"><span style={{ color: 'lemonchiffon' ,fontWeight:'bolder'}}>Register</span></a></div>)}
+
+                <a href="/signin"><span style={{ color: 'royalblue' }}>Login&#160;&#160;</span></a>
+              <a href="/signup"><span style={{ color: 'royalblue' }}>Register</span></a></div>)}
             </div>
             <button className="theme-switcher gray-circle-btn" type="button" title="Switch theme">
               <span className="sr-only">Switch theme</span>

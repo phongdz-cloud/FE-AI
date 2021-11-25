@@ -13,7 +13,7 @@ import {
 } from "../constants/uploadImageConstant";
 
 
-export const uploadImage = (image) => async (dispatch) => {
+export const uploadImage = (image) => async (dispatch,getState) => {
   try {
   
     dispatch({
@@ -23,11 +23,12 @@ export const uploadImage = (image) => async (dispatch) => {
     fd.append("file", image);
     fd.append("type", "DAILY");
 
-    console.log(fd);
+   
+    const {userLogin:{userInfo}}=getState()
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
-        Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzb25zb24iLCJpYXQiOjE2Mzc4MjU3NzAsImV4cCI6MTYzNzgzMDk1NH0.JHvRaUSvC23BMGKxkuxwZ6vkpsLRhQ9Jtqb7Vj3cR5A3sLBr5v4D7RIIUoAnQWWWs4CpJ_t1Lm8vsjX0l6Hd2g`,
+        Authorization: `Bearer ${userInfo.token}`,
       },
     };
 
@@ -48,18 +49,19 @@ export const uploadImage = (image) => async (dispatch) => {
   }
 };
 
-export const updateImage = (image) => async (dispatch) => {
+export const updateImage = (image) => async (dispatch,getState) => {
   try {
   
     dispatch({
       type: IMAGE_UPDATE_REQUEST,
     });
     
-  
+    const {userLogin:{userInfo}}=getState()
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzb25zb24iLCJpYXQiOjE2Mzc4MjU3NzAsImV4cCI6MTYzNzgzMDk1NH0.JHvRaUSvC23BMGKxkuxwZ6vkpsLRhQ9Jtqb7Vj3cR5A3sLBr5v4D7RIIUoAnQWWWs4CpJ_t1Lm8vsjX0l6Hd2g`,
+        Authorization: `Bearer ${userInfo.token}`
+
       },
     };
     

@@ -64,9 +64,9 @@ function SigninScreen() {
                 Sign in
               </button>
             </form>
-            {loading && <h2 style={{color:'deepskyblue', marginTop:'30px'}}>loading...</h2>}
-            {error && <h2 style={{color:'red', marginTop:'30px'}}>{error.message}, {error.details}</h2>}
           </article>
+          {loading && <h2 style={{ color: 'deepskyblue', marginTop: '30px' }}>loading...</h2>}
+          {error && <h2 style={{ color: 'red', marginTop: '30px' }}>{error.message}, {error.details}</h2>}
         </main>
       </div>
     </>

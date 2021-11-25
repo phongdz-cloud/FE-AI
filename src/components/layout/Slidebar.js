@@ -10,8 +10,8 @@ function Slidebar() {
               <span className="sr-only">Home</span>
               <span className="icon logo" aria-hidden="true" />
               <div className="logo-text">
-                <span className="logo-title">Elegant</span>
-                <span className="logo-subtitle">Dashboard</span>
+                <span className="logo-title">PDTS</span>
+                <span className="logo-subtitle">Ai Project</span>
               </div>
             </a>
             <button

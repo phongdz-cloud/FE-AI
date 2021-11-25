@@ -1,21 +1,28 @@
 import {
-  USER_DETAILS_FAIL,
-  USER_DETAILS_REQUEST,
-  USER_DETAILS_SUCCESS,
-  USER_LOGIN_FAIL,
-  USER_LOGIN_REQUEST,
-  USER_LOGIN_SUCCESS,
-  USER_LOGOUT,
-  USER_REGISTER_FAIL,
-  USER_REGISTER_REQUEST,
-  USER_REGISTER_SUCCESS,
-  USER_UPDATE_PROFILE_FAIL,
-  USER_UPDATE_PROFILE_REQUEST,
-  USER_UPDATE_PROFILE_SUCCESS,
-} from "../constants/userConstants";
-import axios from "axios";
 
-const URL = "http://localhost:8085";
+    CUSGET_PROFILE_REQUEST,
+    CUSGET_PROFILE_SUCCESS,
+    CUSGET_PROFILE_FAIL,
+    USER_LOGIN_FAIL,
+    USER_LOGIN_REQUEST,
+    USER_LOGIN_SUCCESS,
+    USER_LOGOUT,
+    USER_REGISTER_FAIL,
+    USER_REGISTER_REQUEST,
+    USER_REGISTER_SUCCESS,
+    CUSUPDATE_PROFILE_REQUEST,
+    CUSUPDATE_PROFILE_SUCCESS,
+    CUSUPDATE_PROFILE_FAIL,
+    CUSGET_PAYMENT_REQUEST,
+    CUSGET_PAYMENT_SUCCESS,
+    CUSGET_PAYMENT_FAIL,
+    CUSDELE_PAYMENT_REQUEST,
+    CUSDELE_PAYMENT_SUCCESS,
+    CUSDELE_PAYMENT_FAIL,
+} from "../constants/userConstants"
+import axios from 'axios'
+
+const URL = 'https://paymentmanagerment.herokuapp.com'
 
 export const login = (username, password) => async (dispatch) => {
   try {
@@ -55,97 +62,188 @@ export const logout = () => (dispatch) => {
 };
 
 export const register = (username, password, email) => async (dispatch) => {
-  try {
-    dispatch({
-      type: USER_REGISTER_REQUEST,
-    });
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
+    try {
+        dispatch({
+            type: USER_REGISTER_REQUEST
+        })
 
-    const { data } = await axios.post(
-      `${URL}/api/signup`,
-      { username, password, email },
-      config
-    );
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
 
-    dispatch({
-      type: USER_REGISTER_SUCCESS,
-      payload: data,
-    });
-    console.log(data);
-  } catch (error) {
-    dispatch({
-      type: USER_REGISTER_FAIL,
-      payload: error.response.data,
-    });
-  }
-};
+        const { data } = await axios.post(`${URL}/api/signup`, { username, password, email }, config)
 
-export const getUserProfile = () => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: USER_DETAILS_REQUEST,
-    });
+        dispatch({
+            type: USER_REGISTER_SUCCESS,
+            payload: data
+        })
+        console.log(data)
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+    } catch (error) {
+        dispatch({
+            type: USER_REGISTER_FAIL,
+            payload: error.response.data
+        })
+    }
+}
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
+export const CusGetProfile = () => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: CUSGET_PROFILE_REQUEST
+        })
 
-    const { data } = await axios.get(`${URL}/v1/user/profile`, config);
+        const { userLogin: { userInfo } } = getState()
 
-    dispatch({
-      type: USER_DETAILS_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: USER_DETAILS_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
 
-export const updateUserProfile = (user) => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: USER_UPDATE_PROFILE_REQUEST,
-    });
+        const { data } = await axios.get(`${URL}/api/customerprofile`, config)
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+        dispatch({
+            type: CUSGET_PROFILE_SUCCESS,
+            payload: data
+        })
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
+    } catch (error) {
+        dispatch({
+            type: CUSGET_PROFILE_FAIL,
+            payload: error.response.data
+        })
+    }
+}
 
-    const { data } = await axios.put(`${URL}/v1/user/profile`, user, config);
 
-    dispatch({
-      type: USER_UPDATE_PROFILE_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: USER_UPDATE_PROFILE_FAIL,
-      payload: error.response.data,
-    });
-  }
-};
+export const CusUpdateProfile = (updateData) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: CUSUPDATE_PROFILE_REQUEST
+        })
+
+        const { userLogin: { userInfo } } = getState()
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.post(`${URL}/api/customer`, updateData, config)
+
+        dispatch({
+            type: CUSUPDATE_PROFILE_SUCCESS,
+            payload: data
+        })
+
+    } catch (error) {
+        dispatch({
+            type: CUSUPDATE_PROFILE_FAIL,
+            payload: error.response.data
+        })
+    }
+}
+
+export const cusGetPayment = () => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: CUSGET_PAYMENT_REQUEST
+        })
+
+        const { userLogin: { userInfo } } = getState()
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            },
+        }
+
+        const { data } = await axios.get(`${URL}/api/payment`, config)
+
+        dispatch({
+            type: CUSGET_PAYMENT_SUCCESS,
+            payload: data
+        })
+
+    } catch (error) {
+        dispatch({
+            type: CUSGET_PAYMENT_FAIL,
+            payload: error.response.data
+        })
+    }
+}
+
+export const cusGetType = (paymentType) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: CUSGET_PAYMENT_REQUEST
+        })
+
+        const { userLogin: { userInfo } } = getState()
+
+        var bodyFormData = new FormData();
+        bodyFormData.append('type', paymentType);
+
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.post(`${URL}/api/paymentOfCustomer`, bodyFormData, config)
+
+        dispatch({
+            type: CUSGET_PAYMENT_SUCCESS,
+            payload: data
+        })
+
+    } catch (error) {
+        dispatch({
+            type: CUSGET_PAYMENT_FAIL,
+            payload: error.response.data
+        })
+    }
+}
+
+
+
+export const CusDeletePayment = (deleids) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: CUSDELE_PAYMENT_REQUEST
+        })
+
+        const { userLogin: { userInfo } } = getState()
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            },
+            data: {
+                ids: deleids
+            }
+        }
+        const { data } = await axios.delete(`${URL}/api/payment`, config)
+
+        dispatch({
+            type: CUSDELE_PAYMENT_SUCCESS,
+            payload: data
+        })
+
+    } catch (error) {
+        dispatch({
+            type: CUSDELE_PAYMENT_FAIL,
+            payload: error.response.data
+        })
+    }
+}
