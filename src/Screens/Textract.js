@@ -2,7 +2,8 @@ import React, { useEffect, useState, Component } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadImage, updateImage } from "../actions/upImageAction";
-
+import "./formCss.css";
+// import "./data.css"
 import styled from "styled-components";
 import {
   Row,
@@ -15,12 +16,14 @@ import {
 
 import Loader from "../components/Loader";
 import { within } from "@testing-library/dom";
+import { width } from "dom-helpers";
 var data = {
   itemLines: [],
   specialFields: [],
-  summaryFields:[],
+  summaryFields: [],
   type: "DAILY",
 };
+
 function Textract() {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -32,12 +35,15 @@ function Textract() {
   }, []);
   var Num = 0;
   var flag = false;
+
   function showPreview(event) {
     if (event.target.files.length > 0) {
       var src = URL.createObjectURL(event.target.files[0]);
       setImage(event.target.files[0]);
-
+      
       var preview = document.getElementById("file-ip-1-preview");
+      var inputBtn = document.getElementById("file-ip-1");
+      inputBtn.style.display="none"
       preview.src = src;
       preview.style.display = "block";
     }
@@ -73,7 +79,6 @@ function Textract() {
       data.itemLines.push({
         item: e.target[i].value,
         price: e.target[i + 1].value,
-        
       });
 
       i = i + 2;
@@ -82,8 +87,7 @@ function Textract() {
     console.log(data);
   }
   const divNumStyle = {
-    display: 'none',
-    
+    display: "none",
   };
   function submitHandlerFormSpecialFields(e) {
     e.preventDefault();
@@ -94,7 +98,6 @@ function Textract() {
       data.specialFields.push({
         fieldName: e.target[i].value,
         value: e.target[i + 1].value,
-
       });
 
       i = i + 2;
@@ -159,7 +162,7 @@ function Textract() {
       updateImage({
         itemLines: data.itemLines,
         specialFields: data.specialFields,
-        summaryFields:upImage.summaryFields,
+        summaryFields: upImage.summaryFields,
         type: "DAILY",
       })
     );
@@ -173,15 +176,8 @@ function Textract() {
         <div className="layer" />
         <main className="page-center">
           <article className="">
-            <h1 className="sign-up__title">Item line</h1>
+            <h3 className="sign-up__title" id="form1">Item line</h3>
 
-            <button
-              className="form-btn primary-default-btn transparent-btn"
-              type="submit"
-              onClick={(e) => confirmHandler(e)}
-            >
-              Comfirm
-            </button>
 
             <form
               className="sign-up-form form"
@@ -189,7 +185,9 @@ function Textract() {
             >
               {itemLines.map((item) => {
                 return (
-                  <label className="form-label-wrapper">
+                  <label className="form-label-wrapper" style={{
+                    flexDirection:'row'
+                  }}>
                     <p className="form-label">Item</p>
                     <input
                       className="form-input"
@@ -234,7 +232,9 @@ function Textract() {
             >
               {specialFields.map((item) => {
                 return (
-                  <label className="form-label-wrapper">
+                  <label className="form-label-wrapper" style={{
+                    flexDirection:'row'
+                  }}>
                     <p className="form-label">fieldName</p>
                     <input
                       className="form-input"
@@ -269,6 +269,18 @@ function Textract() {
               </button>
             </form>
           </article>
+
+          
+          <button
+              className="form-btn primary-default-btn transparent-btn"
+              type="submit"
+              style={{
+                backgroundColor:'rgb(221, 81, 69)'
+              }}
+              onClick={(e) => confirmHandler(e)}
+            >
+              Comfirm
+            </button>
         </main>
       </div>
     );
@@ -276,94 +288,132 @@ function Textract() {
   function handleShow() {
     return (
       <>
-        <Col>
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>Num</th>
-                <th>Item name</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-            <div  style={divNumStyle}> {Num=0} </div>
-              {upImage ? (
-                upImage.itemLines.map((item) => {
-                  Num += 1;
+        <Row>
+          {" "}
+          <div className="users-table table-wrapper">
+          <a href="#form1">
+          <button
+              className="form-btn primary-default-btn transparent-btn float-end"
+              
+              type="submit"
+              style={{
+                backgroundColor:'rgb(81, 221, 69)',
+                width: '19%',
+                marginLeft:'554px'
+              }}
+              
+            >
+             Update
+            </button></a>
+
+
+            <h3>Item inline</h3>
+            <table className="posts-table">
+              <thead>
+                <tr className="users-table-info">
+                  <th style={{
+                    width: '98px'
+                  }}>
+                   
+                  </th>
+                  <th style={{
+                        width: '300px'
+                  }}>Item</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                <div style={divNumStyle}> {(Num = 0)} </div>
+                {upImage.itemLines.map((i) => {
                   return (
                     <tr>
-                      <th>{Num}</th>
-                      <th>{item.item}</th>
-                      <th>{item.price}</th>
+                      <td>
+                        <span> {++Num} </span>
+                      </td>
+                      <td>
+                        <span> {i.item} </span>
+                      </td>
+                      <td>
+                        <span> {i.price} </span>
+                      </td>
                     </tr>
                   );
-                })
-              ) : (
-                <Loader />
-              )}
-            </tbody>
-          </Table>
-        </Col>
-        <Col>
-          <div className="stat-cards-item">
-            <Table striped bordered hover>
+                })}
+              </tbody>
+            </table>
+          </div>
+        </Row>
+
+        <Row>
+          {" "}
+          <div className="users-table table-wrapper">
+          <h3>Special Field</h3>
+            <table className="posts-table">
               <thead>
-                <tr>
-                  <th>Num</th>
-                  <th>Item name</th>
+                <tr className="users-table-info">
+                  <th>
+                   
+                  </th>
+                  <th>Field name</th>
                   <th>Value</th>
                 </tr>
               </thead>
               <tbody>
-              <div  style={divNumStyle}> {Num=0} </div>
-                {upImage ? (
-                  upImage.specialFields.map((item) => {
-                    Num += 1;
-                    return (
-                      <tr>
-                        <th>{Num}</th>
-                        <th>{item.fieldName}</th>
-                        <th>{item.value}</th>
-                      </tr>
-                    );
-                  })
-                ) : (
-                  <Loader />
-                )}
+                <div style={divNumStyle}> {(Num = 0)} </div>
+                {upImage.specialFields.map((i) => {
+                  return (
+                    <tr>
+                      <td>
+                        <span> {++Num} </span>
+                      </td>
+                      <td>
+                        <span> {i.fieldName} </span>
+                      </td>
+                      <td>
+                        <span> {i.value} </span>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
-            </Table>
+            </table>
           </div>
-        </Col>
-        <Col>
-          <div className="stat-cards-item">
-            <Table striped bordered hover>
+        </Row>
+        <Row>
+          {" "}
+          <div className="users-table table-wrapper">
+          <h3>Summary field</h3>
+            <table className="posts-table">
               <thead>
-                <tr>
-                  <th>Num</th>
-                  <th>Item name</th>
+                <tr className="users-table-info">
+                  <th>
+                   
+                  </th>
+                  <th>Field name</th>
                   <th>Value</th>
                 </tr>
               </thead>
               <tbody>
-              <div  style={divNumStyle}> {Num=0} </div>
-                {upImage ? (
-                  upImage.summaryFields.map((item) => {
-                    Num += 1;
-                    return (
-                      <tr>
-                        <th>{Num}</th>
-                        <th>{item.fieldName}</th>
-                        <th>{item.value}</th>
-                      </tr>
-                    );
-                  })
-                ) : (
-                  <Loader />
-                )}
+                <div style={divNumStyle}> {(Num = 0)} </div>
+                {upImage.summaryFields.map((i) => {
+                  return (
+                    <tr>
+                      <td>
+                        <span> {++Num} </span>
+                      </td>
+                      <td>
+                        <span> {i.fieldName} </span>
+                      </td>
+                      <td>
+                        <span> {i.value} </span>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
-            </Table>
+            </table>
           </div>
-        </Col>
+        </Row>
       </>
     );
   }
@@ -372,187 +422,248 @@ function Textract() {
     flag = true;
     return (
       <>
-      <Row> <div className="users-table table-wrapper">
-          <h2>Item inline</h2>
-          <table className="posts-table">
-            <thead>
-              <tr className="users-table-info">
-                <th>
-                  <label className="users-table__checkbox ms-20">
-                    <p></p>
-                  </label>
-                </th>
-                <th>Item</th>
-                <th>Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              <div  style={divNumStyle}> {Num=0} </div>
-              {
-              putImage.itemLines.map((i) => {
-                
-                return(
-                  <tr>
-                  <td>
-                    <span> {++Num} </span>
-                  </td>
-                  <td>
-                    <span> {i.item} </span>
-                  </td>
-                  <td>
-                    <span> {i.price} </span>
-                  </td>
-                </tr>
-                )
-              }
-
-               
-              )}
-            </tbody>
-          </table>
-        </div></Row>
         <Row>
-        <div className="users-table table-wrapper">
-          <h2>Special Fields</h2>
-          <table className="posts-table">
-            <thead>
-              <tr className="users-table-info">
-                <th>
-                  <label className="users-table__checkbox ms-20">
-                    <p></p>
-                  </label>
-                </th>
-                <th>Fieldsname</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              <div  style={divNumStyle}> {Num=0} </div>
-              {
-              putImage.specialFields.map((i) => {
-                
-                return(
-                  <tr>
-                  <td>
-                    <span> {++Num} </span>
-                  </td>
-                  <td>
-                    <span> {i.fieldName} </span>
-                  </td>
-                  <td>
-                    <span> {i.value} </span>
-                  </td>
+          {" "}
+          <div className="users-table table-wrapper">
+            <h3>Item inline</h3>
+            <table className="posts-table">
+              <thead>
+                <tr className="users-table-info">
+                  <th>
+                   
+                  </th>
+                  <th> <span>Item </span> </th>
+                  <th>Price</th>
                 </tr>
-                )
-              }
-
-               
-              )}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                <div style={divNumStyle}> {(Num = 0)} </div>
+                {putImage.itemLines.map((i) => {
+                  return (
+                    <tr>
+                      <td>
+                        <span> {++Num} </span>
+                      </td>
+                      <td>
+                        <span> {i.item} </span>
+                      </td>
+                      <td>
+                        <span> {i.price} </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </Row>
+        <Row>
+          <div className="users-table table-wrapper">
+            <h3>Special Fields</h3>
+            <table className="posts-table">
+              <thead>
+                <tr className="users-table-info">
+                  <th>
+                   
+                  </th>
+                  <th>Fieldsname</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <div style={divNumStyle}> {(Num = 0)} </div>
+                {putImage.specialFields.map((i) => {
+                  return (
+                    <tr>
+                      <td>
+                        <span> {++Num} </span>
+                      </td>
+                      <td>
+                        <span> {i.fieldName} </span>
+                      </td>
+                      <td>
+                        <span> {i.value} </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </Row>
 
         <Row>
-        <div className="users-table table-wrapper">
-          <h2>Summary fields</h2>
-          <table className="posts-table">
-            <thead>
-              <tr className="users-table-info">
-                <th>
-                  <label className="users-table__checkbox ms-20">
-                    <p></p>
-                  </label>
-                </th>
-                <th>Fieldsname</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              <div  style={divNumStyle}> {Num=0} </div>
-              {
-              putImage.summaryFields.map((i) => {
-                
-                return(
-                  <tr>
-                  <td>
-                    <span> {++Num} </span>
-                  </td>
-                  <td>
-                    <span> {i.fieldName} </span>
-                  </td>
-                  <td>
-                    <span> {i.value} </span>
-                  </td>
+          <div className="users-table table-wrapper">
+            <h3>Summary fields</h3>
+            <table className="posts-table">
+              <thead>
+                <tr className="users-table-info">
+                  <th>
+                   
+                  </th>
+                  <th>Fieldsname</th>
+                  <th>Value</th>
                 </tr>
-                )
-              }
-
-               
-              )}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                <div style={divNumStyle}> {(Num = 0)} </div>
+                {putImage.summaryFields.map((i) => {
+                  return (
+                    <tr>
+                      <td>
+                        <span> {++Num} </span>
+                      </td>
+                      <td>
+                        <span> {i.fieldName} </span>
+                      </td>
+                      <td>
+                        <span> {i.value} </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </Row>
-       
       </>
     );
+  }
+
+  function showImageField(){
+      return(
+        <div className="col-lg-7" >
+        <div className="form-content">
+          <div className="form-items" style={{
+        maxHeight: '100vh',
+        overflow:'scroll'
+      }}>
+            {upImage ? (
+              putImage ? (
+                handleUpdate()
+              ) : (
+                handleShow()
+              )
+            ) : (
+              <p></p>
+            )}
+            {control ? (
+              flag === true ? (
+                <p></p>
+              ) : (
+                handlePayment(upImage)
+              )
+            ) : (
+              <h3>Waiting...</h3>
+            )}
+          </div>
+        </div>
+      </div>
+
+      )
   }
   return (
     <>
       <div className="use-bootstrap">
         <main className="main users chart-page" id="skip-target">
-          <div className="container">
-            <Row className="">
-              <Col className="">
-                <div className="input-side">
-                  <ListGroup>
-                    <ListGroupItem>
-                      <h3>Input Picture</h3>{" "}
-                    </ListGroupItem>
+          <>
+            <Row className=""></Row>
 
-                    <Form onSubmit={submitHandler}>
-                      <Form.Group controlId="upload">
-                        <Form.Label>Upload image</Form.Label>
-                        <div className="preview">
-                          <img id="file-ip-1-preview" />
-                        </div>
-                        <ListGroupItem>
-                          <input
-                            type="file"
-                            id="file-ip-1"
-                            accept="image/*"
-                            onChange={(e) => {
-                              showPreview(e);
-                            }}
-                          />{" "}
-                        </ListGroupItem>
-                        <ListGroupItem>
-                          <div className="row">
-                            <Button variant="success" type="submit">
-                              Send
-                            </Button>
-                          </div>{" "}
-                        </ListGroupItem>
-                      </Form.Group>
-                    </Form>
-                  </ListGroup>
+            <div
+              className="row"
+              style={{
+                marginLeft: "18px",
+                marginRight: "10px",
+              }}
+            >
+              <div className="col-lg-5" style={{
+                maxHeight: '100vh',
+                overflow:'scroll'
+              }}>
+                
+              <form
+                      className="requires-validation"
+                      noValidate
+                      onSubmit={submitHandler}
+                    >
+                <div className="form-content">
+                  <div className="form-items">
+                    <h3>Import a image</h3>
+                    <input
+                          
+                          type="file"
+                          style={{
+                            height: '282px',
+                            minWidth: '450px'
+                          }}
+                          id="file-ip-1"
+                          accept="image/*"
+                          onChange={(e) => {
+                            showPreview(e);
+                          }}
+                        />
+                      <div className="col-md-12">
+                        
+
+                        <img id="file-ip-1-preview" style={{ width: "100%" }} />
+                      </div>
+                    
+                  </div>
                 </div>
-              </Col>
-              {upImage ? putImage ? handleUpdate() : handleShow() : <p></p>}
-            </Row>
+                <div className="form-button mt-3">
+                  <button
+                    style={{
+                      width: "91%",
+                      margin: "10px",
+                    }}
+                    className="form-btn primary-default-btn transparent-btn"
+                    type="submit"
+                  >
+                    Send
+                  </button>
+                </div>
+                </form>
+              </div>
+              <div className="col-lg-7" >
+                <div className="form-content">
+                  <div className="form-items" style={{
+                maxHeight: '80vh',
+                overflow:'scroll'
+              }}>
+                 
+
+                    {upImage ? (
+                      putImage ? (
+                        handleUpdate()
+                      ) : (
+                        handleShow()
+                      )
+                    ) : (
+                      <p></p>
+                    )}
+                    {control ? (
+                      flag === true ? (
+                        <p></p>
+                      ) : (
+                        handlePayment(upImage)
+                      )
+                    ) : (
+                      <h3>Import image to show data !!!</h3>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              
+            </div>
+
+
+
             <Row>
-              {control ? (
-                flag === true ? (
-                  <p></p>
-                ) : (
-                  handlePayment(upImage)
-                )
-              ) : (
-                <h2>Waiting... </h2>
-              )}
+
+                      
             </Row>
-          </div>
+          </>
         </main>
       </div>
     </>
