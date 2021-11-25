@@ -18,7 +18,6 @@ function App() {
   
   if (userInfo) {
     var curToken = jwt_decode(userInfo.token)
-    console.log(curToken)
     if (curToken.exp * 1000 < Date.now()) {
       dispatch(logout())
     }

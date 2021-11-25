@@ -12,10 +12,16 @@ import {
     CUSUPDATE_PROFILE_REQUEST,
     CUSUPDATE_PROFILE_SUCCESS,
     CUSUPDATE_PROFILE_FAIL,
+    CUSGET_PAYMENT_REQUEST,
+    CUSGET_PAYMENT_SUCCESS,
+    CUSGET_PAYMENT_FAIL,
+    CUSDELE_PAYMENT_REQUEST,
+    CUSDELE_PAYMENT_SUCCESS,
+    CUSDELE_PAYMENT_FAIL,
 } from "../constants/userConstants"
 import axios from 'axios'
 
-const URL = 'http://localhost:8082'
+const URL = 'https://paymentmanagerment.herokuapp.com'
 
 export const login = (username, password) => async (dispatch) => {
     try {
@@ -64,7 +70,7 @@ export const register = (username, password, email) => async (dispatch) => {
             }
         }
 
-        const { data } = await axios.post(`${URL}/api/signup`,{username, password, email}, config)
+        const { data } = await axios.post(`${URL}/api/signup`, { username, password, email }, config)
 
         dispatch({
             type: USER_REGISTER_SUCCESS,
@@ -141,3 +147,99 @@ export const CusUpdateProfile = (updateData) => async (dispatch, getState) => {
     }
 }
 
+export const cusGetPayment = () => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: CUSGET_PAYMENT_REQUEST
+        })
+
+        const { userLogin: { userInfo } } = getState()
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            },
+        }
+
+        const { data } = await axios.get(`${URL}/api/payment`, config)
+
+        dispatch({
+            type: CUSGET_PAYMENT_SUCCESS,
+            payload: data
+        })
+
+    } catch (error) {
+        dispatch({
+            type: CUSGET_PAYMENT_FAIL,
+            payload: error.response.data
+        })
+    }
+}
+
+export const cusGetType = (paymentType) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: CUSGET_PAYMENT_REQUEST
+        })
+
+        const { userLogin: { userInfo } } = getState()
+
+        var bodyFormData = new FormData();
+        bodyFormData.append('type', paymentType);
+
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.post(`${URL}/api/paymentOfCustomer`, bodyFormData, config)
+
+        dispatch({
+            type: CUSGET_PAYMENT_SUCCESS,
+            payload: data
+        })
+
+    } catch (error) {
+        dispatch({
+            type: CUSGET_PAYMENT_FAIL,
+            payload: error.response.data
+        })
+    }
+}
+
+
+
+export const CusDeletePayment = (deleids) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: CUSDELE_PAYMENT_REQUEST
+        })
+
+        const { userLogin: { userInfo } } = getState()
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            },
+            data: {
+                ids: deleids
+            }
+        }
+        const { data } = await axios.delete(`${URL}/api/payment`, config)
+
+        dispatch({
+            type: CUSDELE_PAYMENT_SUCCESS,
+            payload: data
+        })
+
+    } catch (error) {
+        dispatch({
+            type: CUSDELE_PAYMENT_FAIL,
+            payload: error.response.data
+        })
+    }
+}

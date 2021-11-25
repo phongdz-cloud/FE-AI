@@ -29,7 +29,7 @@ function Mainnav() {
               {userInfo ? (
                 <div className="notification-wrapper">
                   <button className="gray-circle-btn dropdown-btn" title="To messages" type="button">
-                    <picture><source srcSet="./img/avatar/avatar-illustrated-02.webp" type="image/webp" /><img src="./img/avatar/avatar-illustrated-02.png" alt="User" /></picture>
+                    <span>{userInfo.name}</span>
                   </button>
                   <ul className="users-item-dropdown notification-dropdown dropdown">
                     <li>

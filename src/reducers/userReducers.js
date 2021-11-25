@@ -12,7 +12,12 @@ import {
     CUSUPDATE_PROFILE_REQUEST,
     CUSUPDATE_PROFILE_SUCCESS,
     CUSUPDATE_PROFILE_FAIL,
-
+    CUSGET_PAYMENT_REQUEST,
+    CUSGET_PAYMENT_SUCCESS,
+    CUSGET_PAYMENT_FAIL,
+    CUSDELE_PAYMENT_REQUEST,
+    CUSDELE_PAYMENT_SUCCESS,
+    CUSDELE_PAYMENT_FAIL,
 } from "../constants/userConstants"
 
 export const userLoginReducer = (state = {}, action) => {
@@ -50,6 +55,25 @@ export const UpdateProfileReducer = (state = {}, action) => {
         case CUSUPDATE_PROFILE_REQUEST: return { loading: true }
         case CUSUPDATE_PROFILE_SUCCESS: return { loading: false, successRes: action.payload }
         case CUSUPDATE_PROFILE_FAIL: return { loading: false, errorRes: action.payload }
+        default: return state
+    }
+}
+
+export const getPaymentReducer = (state = {}, action) => {
+    switch (action.type) {
+        case CUSGET_PAYMENT_REQUEST: return { getPaymentLoading: true }
+        case CUSGET_PAYMENT_SUCCESS: return { getPaymentLoading: false, allPayment: action.payload }
+        case CUSGET_PAYMENT_FAIL: return { getPaymentLoading: false, allPayment: action.payload }
+        default: return state
+    }
+}
+
+
+export const cusDelePaymentReducer = (state = {}, action) => {
+    switch (action.type) {
+        case CUSDELE_PAYMENT_REQUEST: return { deleLoading: true }
+        case CUSDELE_PAYMENT_SUCCESS: return {deleLoading: false, deleSuccess: action.payload }
+        case CUSDELE_PAYMENT_FAIL: return { deleLoading: false, deleFail: action.payload }
         default: return state
     }
 }
